@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Vitals::Reporters::RiemannReporter do
 
-  let(:reporter){ Vitals::Reporters::RiemannReporter.new(host: 'localhost', port: 5555, format: TestFormat.new) }
+  let(:reporter){ Vitals::Reporters::RiemannReporter.new(host: 'localhost', port: 5555, format: TestFormat.new, facility: 'my-service', environment: 'env') }
   let(:epoch_now){ 12345 }
 
   it 'should set up riemann' do
@@ -11,7 +11,7 @@ describe Vitals::Reporters::RiemannReporter do
 
   it '#inc' do
     freeze_time_at(epoch_now) do
-      event = {:service=>"1.2", :metric=>1, :time=>epoch_now, :tags=>["vitals", "counter"]}
+      event = {:service=>"1.2", :metric=>1, :time=>epoch_now, :tags=>["vitals", "counter"], :facility=>'my-service', :environment=>'env'}
       mock(reporter.riemann).<<(event).times(1)
       reporter.inc('1.2')
     end
@@ -19,18 +19,19 @@ describe Vitals::Reporters::RiemannReporter do
 
   it '#timing' do
     freeze_time_at(epoch_now) do
-      event = {:service=>"1.2", :metric=>42, :time=>epoch_now, :tags=>["vitals", "timer"]}
+      event = {:service=>"1.2", :metric=>43, :time=>epoch_now, :tags=>["vitals", "timer"], :facility=>'my-service', :environment=>'env'}
       mock(reporter.riemann).<<(event).times(1)
-      reporter.timing('1.2', 42)
+      reporter.timing('1.2', 43)
     end
   end
 
   it '#gauge' do
     freeze_time_at(epoch_now) do
-      event = {:service=>"1.2", :metric=>32, :time=>epoch_now, :tags=>["vitals", "gauge"]}
+      event = {:service=>"1.2", :metric=>32, :time=>epoch_now, :tags=>["vitals", "gauge"], :facility=>'my-service', :environment=>'env'}
       mock(reporter.riemann).<<(event).times(1)
       reporter.gauge('1.2', 32)
     end
   end
+
 end
 

@@ -1,6 +1,7 @@
 require "vitals/riemann_reporter/version"
 
 require 'riemann/client'
+require_relative 'riemann_reporter/riemann_format'
 require 'vitals'
 
 module Vitals::Reporters
@@ -8,9 +9,11 @@ module Vitals::Reporters
     attr_accessor :format
     attr_reader :riemann
 
-    def initialize(host: 'localhost', port: 5555, timeout: 5, format:nil)
+    def initialize(host: 'localhost', port: 5555, timeout: 5, format: nil, facility: nil, environment: nil)
       @riemann = Riemann::Client.new(host: host, port: port, timeout: timeout)
       @format = format
+      @facility = facility
+      @environment = environment
     end
 
     def inc(m)
@@ -31,7 +34,9 @@ module Vitals::Reporters
         service: m,
         metric: v,
         time: Time.now.to_i,
-        tags: ['vitals', type]
+        tags: ['vitals', type],
+        facility: @facility,
+        environment: @environment
       }
     end
   end
