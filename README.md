@@ -20,12 +20,15 @@ Or install it yourself as:
 
 ## Usage
 
-Initialise Vitals with a RiemannReporter instead of the StatsdReporter:
+Initialise Vitals with a RiemannReporter. You may also like to use the RiemannFormat so that your metric names do not include things that are already passed to Riemann as fields(ie. host, facility and environment):
 
 ```
 require 'vitals'
 Vitals.configure! do |c|
-  c.reporter = Vitals::Reporters::RiemannReporter.new(host: 'riemann-host', port: 5555)
+  c.format = Vitals::Formats:RiemannFormat
+  c.facility = 'facility'
+  c.environment = 'environment'
+  c.reporter = Vitals::Reporters::RiemannReporter.new(host: 'riemann-host', port: 5555, facility: 'facility', environment: 'environment')
 end
 ```
 
