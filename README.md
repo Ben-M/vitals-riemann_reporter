@@ -32,6 +32,14 @@ Vitals.configure! do |c|
 end
 ```
 
+The Riemann client does not open a connection until a metric is sent, so you can speed up your first request by sending a connected event in your initializer:
+
+```
+Vitals.inc('riemann_connected')
+```
+
+In Riemann, events will be tagged as 'vitals' and either 'counter', 'gauge' or 'timer' depending on the type of event. They will have their host, facility and environment set as fields.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
