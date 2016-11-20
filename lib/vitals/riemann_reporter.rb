@@ -23,6 +23,10 @@ module Vitals::Reporters
     def gauge(m, v)
       emit(format.format(m), v, 'gauge')
     end
+    
+    def count(m, v)
+      emit(format.format(m), v, 'counter')
+    end
 
     def timing(m, v)
       emit(format.format(m), v, 'timer')
