@@ -16,6 +16,14 @@ describe Vitals::Reporters::RiemannReporter do
       reporter.inc('1.2')
     end
   end
+  
+  it '#count' do
+    freeze_time_at(epoch_now) do
+      event = {:service=>"1.2", :metric=>8, :time=>epoch_now, :tags=>["vitals", "counter"], :facility=>'my-service', :environment=>'env'}
+      mock(reporter.riemann).<<(event).times(1)
+      reporter.count('1.2', 8)
+    end
+  end
 
   it '#timing' do
     freeze_time_at(epoch_now) do
